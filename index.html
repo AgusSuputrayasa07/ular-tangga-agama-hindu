@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ular Tangga Agama Hindu</title>
+<style>
+:root{--bg:#fff4d6;--card:#fff;--ink:#3b2410;--pri:#e8590c;--pri2:#c2410c;--gold:#f59f00;--ok:#2f9e44;--bad:#e03131;--c1:#ffe8a3;--c2:#ffd8a8;--c3:#d3f9d8;--c4:#e5dbff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#2a1a0c;--card:#3d2813;--ink:#fff1dc;--c1:#6b4a14;--c2:#7a4a1a;--c3:#24502c;--c4:#4a3a78}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Comic Sans MS",system-ui,sans-serif;font-size:17px;min-height:100%}
+.scr{display:none;max-width:1000px;margin:0 auto;padding:14px}.scr.on{display:block}
+h1{font-size:clamp(26px,6vw,44px);margin:.2em 0;color:var(--pri2)}h2{margin:.3em 0}
+.card{background:var(--card);border-radius:20px;padding:16px;box-shadow:0 4px 0 rgba(0,0,0,.15);margin:10px 0}
+button{font:inherit;font-weight:bold;border:0;border-radius:16px;min-height:48px;min-width:48px;padding:10px 20px;background:var(--pri);color:#fff;cursor:pointer;box-shadow:0 4px 0 var(--pri2)}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pri2)}button:disabled{opacity:.5;cursor:not-allowed}
+button.alt{background:var(--gold);box-shadow:0 4px 0 #b57400;color:#3b2410}button.sel{outline:4px solid var(--ok)}
+input{font:inherit;padding:10px;border-radius:12px;border:2px solid var(--gold);min-height:48px;width:100%;margin:4px 0;background:var(--card);color:var(--ink)}
+.hero{text-align:center;padding:20px 10px}.hero .big{font-size:64px;letter-spacing:6px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+#game{display:none;gap:12px;flex-wrap:wrap;justify-content:center;align-items:flex-start;max-width:1100px}#game.on{display:flex}
+.bw{flex:1 1 320px;max-width:min(100%,74vh,640px)}
+.board{position:relative;width:100%;aspect-ratio:1;border:4px solid var(--pri2);border-radius:12px;overflow:hidden}
+.grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr)}
+.cell{font-size:clamp(7px,1.6vw,12px);padding:1px 2px;position:relative;border:1px solid rgba(0,0,0,.08);color:#3b2410}
+.cell b{font-size:inherit}.cell i{position:absolute;right:1px;bottom:0;font-style:normal;font-size:clamp(9px,2.4vw,18px)}
+svg.ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pawn{position:absolute;width:5.2%;aspect-ratio:1;margin:-2.6% 0 0 -2.6%;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,18px);transition:left .22s,top .22s;z-index:3;box-shadow:0 2px 4px #0006}
+.side{flex:1 1 280px;max-width:420px}
+.pl{display:flex;gap:8px;align-items:center;padding:8px;border-radius:14px;margin:6px 0;background:var(--c1);border:3px solid transparent}.pl.act{border-color:var(--pri);background:var(--c2)}
+.pl small{display:block;opacity:.85}
+#dice{font-size:44px;width:100%;min-height:76px}
+#msg{min-height:44px;font-weight:bold;text-align:center}
+.mod{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;padding:12px;z-index:9;overflow:auto}.mod.on{display:flex}
+.mbox{background:var(--card);border-radius:22px;max-width:560px;width:100%;padding:18px;max-height:96vh;overflow:auto}
+.opt{display:block;width:100%;margin:8px 0;text-align:left;background:var(--c4);color:var(--ink);box-shadow:0 3px 0 #0003}.opt.ok{background:var(--ok);color:#fff}.opt.no{background:var(--bad);color:#fff}
+.tbar{height:10px;background:#0002;border-radius:6px;overflow:hidden}.tbar div{height:100%;background:var(--ok);width:100%}
+.fb{padding:10px;border-radius:12px;background:var(--c3);margin-top:8px}
+ol li{margin:6px 0}table{width:100%;border-collapse:collapse}td,th{padding:6px;border-bottom:1px solid #0002;text-align:left}
+.tag{display:inline-block;background:var(--c4);border-radius:10px;padding:2px 8px;font-size:13px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+
+<section id="home" class="scr on"><div class="card hero">
+<div class="big">🐍🪜🪔</div><h1>Ular Tangga Agama Hindu</h1>
+<p>Kelas I • Pendidikan Agama Hindu dan Budi Pekerti<br>Kitab Rāmāyaṇa dan Mahābhārata, Hyang Widhi, Karma, Sembahyang, dan Kerajaan Hindu 🌺</p>
+<div id="err" style="color:var(--bad)"></div>
+<div class="row"><button id="bPlay">▶ Mulai Main</button><button class="alt" id="bHow">📖 Cara Bermain</button></div>
+<p id="rec"></p></div></section>
+
+<section id="setup" class="scr"><div class="card"><h2>Pilih Mode</h2>
+<div class="row" id="modes"></div><div id="names"></div>
+<div class="row"><button id="bGo">🎲 Ayo Mulai!</button><button class="alt" data-back>⬅ Kembali</button></div></div></section>
+
+<section id="how" class="scr"><div class="card"><h2>📖 Cara Bermain di Kelas</h2><ol>
+<li><b>Pilih mode dan pemain</b>: 1 pemain melawan komputer, atau 2–4 pemain bergiliran.</li>
+<li><b>Lempar dadu</b>: tekan tombol dadu, hasilnya 1–6.</li>
+<li><b>Pion berjalan</b> petak demi petak sesuai angka dadu.</li>
+<li><b>Cek jenis petak</b>: setiap petak (kecuali 1 dan 100) memberi soal. Ada petak biasa, ⭐ bintang, awal tangga, dan kepala ular.</li>
+<li><b>Jawab soal</b> pilihan ganda dalam 20 detik. Benar = +10 poin (⭐ = +20).</li>
+<li><b>Tangga atau ular</b>: tangga benar → naik. Ular benar → selamat. Jawaban salah di petak mana pun → pion kembali ke posisi sebelum dadu dilempar.</li>
+<li><b>Giliran berikutnya</b>: tiga jawaban benar berturut-turut mendapat bonus +5.</li>
+<li><b>Finis di 100</b>: langkah harus pas. Jika dadu terlalu besar, pion diam. Pemain pertama yang finis dapat +50.</li>
+<li><b>Lihat hasil belajar</b>: laporan skor, ketepatan, dan materi yang perlu diulang.</li></ol>
+<h3>Tips untuk Guru</h3><p>Bacakan soal bersama-sama, ajak murid membahas penjelasan jawaban, dan bagi kelas menjadi tim 2–4. Kaitkan dengan kehidupan di Bali: canang, pura, sanggah, dan upacara.</p>
+<button data-back>⬅ Kembali</button></div></section>
+
+<section id="game" class="scr">
+<div class="bw"><div class="board" id="board"><div class="grid" id="grid"></div><svg class="ov" id="svg" viewBox="0 0 100 100"></svg></div>
+<p style="font-size:13px">Setiap petak ada soal • ⭐ bintang (+20) • 🪜 tangga • 🐍 ular • jawaban salah = kembali</p></div>
+<div class="side"><div class="card"><div id="pls"></div><div id="msg"></div>
+<button id="dice">🎲 Lempar Dadu</button>
+<div class="row" style="margin-top:10px"><button class="alt" id="bHow2">📖</button><button class="alt" id="bQuit">🏠 Menu</button></div></div></div></section>
+
+<section id="end" class="scr"><div class="card"><h2>🏆 Hasil Belajar</h2><div id="res"></div>
+<div class="row"><button id="bAgain">🔁 Main Lagi</button><button class="alt" id="bMenu">🏠 Menu</button></div></div></section>
+
+<div class="mod" id="quiz"><div class="mbox"><div class="tbar"><div id="tb"></div></div><p><span class="tag" id="qt"></span> <span class="tag" id="qp"></span></p>
+<h3 id="qq"></h3><div id="qo"></div><div id="fb"></div></div></div>
+<div class="mod" id="conf"><div class="mbox"><h3>Kembali ke menu?</h3><p>Permainan yang sedang berjalan akan berhenti.</p><div class="row"><button id="cy">Ya</button><button class="alt" id="cn">Lanjut main</button></div></div></div>
+
+<script>
+/* ===== DATA ===== */
+const TANGGA={4:25,9:31,17:38,28:54,36:57,51:72,62:83,71:92,20:41,47:68};
+const ULAR={97:78,93:75,88:67,80:59,64:45,56:37,49:30,43:23,34:13,26:7};
+const BINTANG=[12,46,77];
+const TOPIK=["Kitab Rāmāyaṇa dan Mahābhārata","Hyang Widhi Wasa","Subha–Asubha Karma dan Tri Kaya Parisudha","Dainika Upasana dan Sarana Sembahyang","Kerajaan Hindu di Indonesia"];
+const TUJ=["Murid mampu mengenali Kitab Rāmāyaṇa dan Mahābhārata.","Murid mampu memahami Hyang Widhi Wasa sebagai pencipta dan sumber hidup.","Murid mampu mengenali Subha Karma, Asubha Karma, dan Tri Kaya Parisudha.","Murid mampu mengenali Dainika Upasana dan sarana persembahyangan.","Murid mampu mengenali kerajaan-kerajaan Hindu di Indonesia."];
+// format: tingkat|topik|soal|benar|salah1|salah2|salah3
+const RAW=`1|0|Kitab yang menceritakan Sri Rama dan Dewi Sita adalah ....|Rāmāyaṇa|Mahābhārata|Tri Kaya|Canang
+1|0|Kitab yang menceritakan Pandawa dan Korawa adalah ....|Mahābhārata|Rāmāyaṇa|Dupa|Yupa
+1|0|Raja raksasa yang menculik Dewi Sita bernama ....|Rahwana|Hanoman|Yudistira|Mulawarman
+1|0|Kera pemberani yang membantu Sri Rama adalah ....|Hanoman|Rahwana|Bima|Arjuna
+1|0|Jumlah saudara Pandawa adalah ....|Lima|Tiga|Seratus|Sepuluh
+1|0|Istri Sri Rama yang setia bernama ....|Dewi Sita|Dewi Kunti|Dewi Drupadi|Dewi Gangga
+2|0|Pengarang Kitab Rāmāyaṇa adalah ....|Rsi Walmiki|Rsi Byasa|Sri Rama|Gajah Mada
+2|0|Pengarang Kitab Mahābhārata adalah ....|Rsi Byasa|Rsi Walmiki|Hanoman|Purnawarman
+2|0|Pandawa yang tertua dan sangat jujur adalah ....|Yudistira|Bima|Arjuna|Rahwana
+3|0|Sifat Sri Rama yang dapat kita tiru adalah ....|Setia pada kebenaran dan berbakti kepada orang tua|Suka berbohong|Suka marah|Malas belajar
+1|1|Pencipta alam semesta menurut umat Hindu adalah ....|Hyang Widhi Wasa|Raja|Guru|Teman
+1|1|Salam pembuka umat Hindu adalah ....|Om Swastiastu|Selamat tidur|Sampai jumpa|Selamat malam
+1|1|Kita bersyukur karena Hyang Widhi telah memberi kita ....|Kehidupan|Mainan baru|Nilai ujian|Uang saku
+1|1|Contoh ciptaan Hyang Widhi adalah ....|Matahari, pohon, dan hewan|Mobil dan sepeda|Buku dan pensil|Baju dan sepatu
+1|1|Cara bersyukur kepada Hyang Widhi adalah ....|Berdoa dan sembahyang|Bermalas-malasan|Berkelahi|Merusak alam
+2|1|Hyang Widhi ada di ....|Mana-mana, di semua tempat|Hanya di pura|Hanya di langit|Hanya di rumah
+2|1|Sumber hidup semua makhluk adalah ....|Hyang Widhi Wasa|Televisi|Uang|Toko
+2|1|Karena alam ciptaan Hyang Widhi, kita harus ....|Menyayangi dan menjaga alam|Merusak tanaman|Menyiksa hewan|Membuang sampah ke sungai
+3|1|Hyang Widhi Mahakuasa artinya ....|Memiliki kekuasaan atas segalanya|Hanya kuat mengangkat batu|Tinggal di Bali saja|Dapat dilihat mata
+1|2|Perbuatan baik disebut ....|Subha Karma|Asubha Karma|Dupa|Yupa
+1|2|Perbuatan buruk disebut ....|Asubha Karma|Subha Karma|Tri Sandhya|Canang
+1|2|Contoh Subha Karma adalah ....|Menolong teman|Mencontek|Berbohong|Mengejek teman
+1|2|Contoh Asubha Karma adalah ....|Berkata kasar|Hormat kepada guru|Menyapu halaman|Berdoa
+2|2|Tiga perilaku yang disucikan disebut ....|Tri Kaya Parisudha|Tri Sandhya|Dainika Upasana|Subha Karma
+2|2|Manacika artinya berpikir ....|Baik dan suci|Marah|Iri|Malas
+2|2|Wacika artinya berkata ....|Baik dan sopan|Kasar|Bohong|Mengejek
+2|2|Kayika artinya berbuat ....|Baik dan benar|Jahat|Sembarangan|Curang
+2|2|Mengucapkan terima kasih termasuk ....|Wacika|Kayika|Asubha Karma|Manacika
+3|2|Membuang sampah pada tempatnya termasuk ....|Kayika|Wacika|Manacika|Asubha Karma
+3|2|Berpikir ingin membantu ibu termasuk ....|Manacika|Wacika|Kayika|Asubha Karma
+1|3|Persembahyangan yang dilakukan setiap hari disebut ....|Dainika Upasana|Tri Kaya|Rāmāyaṇa|Yupa
+1|3|Tempat suci umat Hindu disebut ....|Pura|Pasar|Sekolah|Stasiun
+1|3|Bunga dalam sembahyang digunakan sebagai ....|Sarana persembahyangan|Mainan|Bekal sekolah|Hadiah ulang tahun
+1|3|Saat sembahyang, kedua tangan kita ....|Dicakupkan di depan dada|Dilipat ke belakang|Dilambaikan|Berkacak pinggang
+2|3|Sarana sembahyang yang berasap harum adalah ....|Dupa|Bunga|Air|Buah
+2|3|Persembahan kecil dari janur dan bunga di Bali disebut ....|Canang|Layang-layang|Tas|Sepatu
+2|3|Tri Sandhya dilakukan ... kali sehari.|Tiga|Satu|Sepuluh|Seratus
+2|3|Sembahyang ditutup dengan ucapan ....|Om Shanti Shanti Shanti Om|Selamat ulang tahun|Sampai jumpa lagi|Hore
+2|3|Tempat sembahyang keluarga di rumah umat Hindu Bali adalah ....|Sanggah atau Merajan|Dapur|Garasi|Kamar mandi
+3|3|Sebelum sembahyang kita harus ....|Membersihkan diri dan berpakaian rapi|Bermain lari-larian|Makan sambil berjalan|Berteriak
+1|4|Kerajaan Hindu tertua di Indonesia adalah ....|Kutai|Majapahit|Warmadewa|Tarumanegara
+2|4|Raja terkenal Kerajaan Kutai bernama ....|Mulawarman|Purnawarman|Hayam Wuruk|Rahwana
+2|4|Kerajaan Tarumanegara dipimpin Raja ....|Purnawarman|Mulawarman|Gajah Mada|Yudistira
+2|4|Kerajaan Majapahit berada di pulau ....|Jawa|Kalimantan|Sumatra|Papua
+2|4|Patih Majapahit yang terkenal dengan Sumpah Palapa adalah ....|Gajah Mada|Mulawarman|Hanoman|Arjuna
+2|4|Prasasti tiang batu peninggalan Kutai disebut ....|Yupa|Canang|Dupa|Pura
+2|4|Kerajaan Hindu di Bali pada masa lampau adalah ....|Bali Kuno (Warmadewa)|Kutai|Tarumanegara|Alengka
+3|4|Pura terbesar di Bali bernama ....|Pura Besakih|Candi Prambanan|Pasar Badung|Bandara
+3|4|Kita menghargai peninggalan kerajaan Hindu dengan ....|Menjaga dan tidak merusaknya|Mencoret dindingnya|Mengambil batunya|Memanjatnya sembarangan`;
+const BANK=RAW.split("\n").map((l,i)=>{const p=l.split("|");return{id:i+1,lv:+p[0],tp:+p[1],q:p[2],a:p[3],w:p.slice(4,7)}});
+
+/* ===== UTIL ===== */
+const $=id=>document.getElementById(id),sleep=ms=>new Promise(r=>setTimeout(r,ms)),rnd=n=>Math.floor(Math.random()*n);
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+let ac;function beep(f,d=.12,t='sine'){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+const sfx={ok:()=>{beep(660);setTimeout(()=>beep(880),120)},no:()=>beep(200,.3,'sawtooth'),step:()=>beep(440,.05),win:()=>[523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.2),i*150))};
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');prev=id==='how'?prev:id}
+let prev='home';
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+
+/* ===== PAPAN: satu sumber posisi ===== */
+function numberToCell(n){const r=Math.floor((n-1)/10);let c=(n-1)%10;if(r%2)c=9-c;return{row:9-r,col:c}}
+function cellCenter(n){const{row,col}=numberToCell(n);return{x:col*10+5,y:row*10+5}}
+function validate(){const e=[],S=new Set(),E=new Set();
+if(Object.keys(TANGGA).length!==10)e.push("Jumlah tangga harus 10");if(Object.keys(ULAR).length!==10)e.push("Jumlah ular harus 10");
+const all=[];for(const[a,b]of Object.entries(TANGGA)){all.push([+a,b,1])}for(const[a,b]of Object.entries(ULAR)){all.push([+a,b,0])}
+all.forEach(([a,b,l])=>{if(l&&b<=a)e.push("Tangga "+a+" tidak naik");if(!l&&b>=a)e.push("Ular "+a+" tidak turun");
+if([1,100].includes(a)||[1,100].includes(b))e.push("Petak 1/100 dipakai: "+a);S.add(a);
+[a,b].forEach(v=>{if(E.has(v))e.push("Petak ganda: "+v);E.add(v)})});
+BINTANG.forEach(v=>{if(E.has(v))e.push("Bintang bentrok: "+v);E.add(v)});return e}
+
+let S=null,modeN=2;
+const COL=["#e03131","#1971c2","#2f9e44","#9c36b5"],AV=["🐒","🏹","🪔","🌺"];
+
+function buildBoard(){const g=$('grid');g.innerHTML='';const cells=[];
+for(let n=1;n<=100;n++){const{row,col}=numberToCell(n);const d=document.createElement('div');d.className='cell';
+d.style.gridRow=row+1;d.style.gridColumn=col+1;d.style.background=(row+col)%2?'#ffe8a3':'#ffd8a8';
+let ic='';if(n===1)ic='🏁';else if(n===100)ic='🏆';else if(BINTANG.includes(n))ic='⭐';
+d.innerHTML='<b>'+n+'</b><i>'+ic+'</i>';g.appendChild(d)}
+const sv=$('svg');let h='';const pt=(a,b,k,off)=>{const p=cellCenter(a),q=cellCenter(b),dx=q.x-p.x,dy=q.y-p.y,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L;return{p,q,L,nx,ny,dx,dy}};
+for(const[a,b]of Object.entries(TANGGA)){const{p,q,L,nx,ny,dx,dy}=pt(+a,b);
+h+=`<line x1="${p.x+nx*1.3}" y1="${p.y+ny*1.3}" x2="${q.x+nx*1.3}" y2="${q.y+ny*1.3}" stroke="#8d5524" stroke-width="1" stroke-linecap="round"/><line x1="${p.x-nx*1.3}" y1="${p.y-ny*1.3}" x2="${q.x-nx*1.3}" y2="${q.y-ny*1.3}" stroke="#8d5524" stroke-width="1" stroke-linecap="round"/>`;
+const k=Math.max(2,Math.floor(L/5));for(let i=1;i<k;i++){const t=i/k,x=p.x+dx*t,y=p.y+dy*t;h+=`<line x1="${x+nx*1.3}" y1="${y+ny*1.3}" x2="${x-nx*1.3}" y2="${y-ny*1.3}" stroke="#c98a4b" stroke-width=".8" stroke-linecap="round"/>`}}
+for(const[a,b]of Object.entries(ULAR)){const{p,q,L,nx,ny,dx,dy}=pt(+a,b);let d='';const N=28;
+for(let i=0;i<=N;i++){const t=i/N,w=Math.sin(t*Math.PI*3)*2.2*(1-t*.4),x=p.x+dx*t+nx*w,y=p.y+dy*t+ny*w;d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
+h+=`<path d="${d}" fill="none" stroke="#1b5e20" stroke-width="2.2" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#69db7c" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 1.5"/><circle cx="${p.x}" cy="${p.y}" r="2.1" fill="#2f9e44" stroke="#1b5e20" stroke-width=".5"/><circle cx="${p.x-.7}" cy="${p.y-.5}" r=".5" fill="#fff"/><circle cx="${p.x+.7}" cy="${p.y-.5}" r=".5" fill="#fff"/>`}
+sv.innerHTML=h;
+S.pawns=S.pl.map((p,i)=>{const e=document.createElement('div');e.className='pawn';e.style.background=COL[i];e.textContent=AV[i];$('board').appendChild(e);return e});renderPawns()}
+function renderPawns(){S.pl.forEach((p,i)=>{const c=cellCenter(p.pos),e=S.pawns[i];e.style.left=c.x+'%';e.style.top=c.y+'%';e.style.transform=`translate(${(i%2?5:-5)}px,${(i>1?5:-5)}px)`})}
+
+/* ===== STATUS ===== */
+function startGame(names){const err=validate();if(err.length){$('err').textContent="Konfigurasi salah: "+err.join("; ");show('home');return}
+const pl=names.map((n,i)=>({name:n,bot:modeN===1&&i===1,pos:1,score:0,ans:0,ok:0,streak:0,bonus:0,tp:[0,1,2,3,4].map(()=>[0,0])}));
+const free=[];for(let n=2;n<100;n++)if(!TANGGA[n]&&!ULAR[n]&&!Object.values(TANGGA).includes(n)&&!Object.values(ULAR).includes(n)&&!BINTANG.includes(n))free.push(n);
+S={pl,cur:0,busy:false,first:false,pool:shuf(BANK),qt:new Set(free),over:false};
+buildBoard();show('game');upd("Giliran "+pl[0].name+" 🎲");maybeBot()}
+function pct(p){return p.ans?Math.round(p.ok/p.ans*100):0}
+function upd(m){if(m!==undefined)$('msg').textContent=m;$('pls').innerHTML=S.pl.map((p,i)=>`<div class="pl ${i===S.cur?'act':''}"><span style="font-size:28px">${AV[i]}</span><div style="flex:1"><b>${p.name}${p.bot?' 🤖':''}</b><small>Petak ${p.pos} • ⭐ ${p.score} poin</small><small>Soal ${p.ans} • ✔ ${p.ok} • ✘ ${p.ans-p.ok} • ${pct(p)}%</small></div></div>`).join('');renderPawns()}
+
+/* ===== ALUR GILIRAN ===== */
+$('dice').onclick=()=>play();
+async function play(){if(!S||S.busy||S.over)return;S.busy=true;$('dice').disabled=true;const p=S.pl[S.cur];
+const F="⚀⚁⚂⚃⚄⚅";for(let i=0;i<8;i++){$('dice').textContent=F[rnd(6)];beep(300+i*30,.04);await sleep(70)}
+const d=1+rnd(6);$('dice').textContent=F[d-1]+" "+d;await sleep(300);
+if(p.pos+d>100){upd(p.name+": angka "+d+" terlalu besar, harus pas ke 100. Pion diam.")}
+else{const from=p.pos;await walk(p,p.pos+d);await land(p,from)}
+if(p.pos===100){return finish(p)}
+await sleep(700);S.cur=(S.cur+1)%S.pl.length;S.busy=false;$('dice').disabled=false;$('dice').textContent="🎲 Lempar Dadu";upd("Giliran "+S.pl[S.cur].name+" 🎲");maybeBot()}
+async function walk(p,to){while(p.pos<to){p.pos++;sfx.step();renderPawns();await sleep(230)}upd()}
+function maybeBot(){if(S&&!S.over&&S.pl[S.cur].bot){setTimeout(play,1000)}}
+async function land(p,from){const n=p.pos,tp=TANGGA[n]?'t':ULAR[n]?'u':BINTANG.includes(n)?'b':'q';if(n===100)return;
+const ok=await ask(p,tp);
+if(!ok){p.pos=from;upd("↩️ Jawaban belum tepat, "+p.name+" kembali ke petak "+from);renderPawns();await sleep(1100)}else if(tp==='t'){upd("🪜 Hebat! "+p.name+" naik tangga ke "+TANGGA[n]);p.pos=TANGGA[n];sfx.ok();renderPawns();await sleep(1000)}
+if(tp==='u'&&ok)upd("Selamat! Terhindar dari ular 🎉");
+upd()}
+function finish(p){S.over=true;if(!S.first){S.first=true;p.score+=50;p.bonus+=50}sfx.win();upd(p.name+" sampai di petak 100! 🏆 +50 poin");
+const best=store('ut_hindu_rekor')||{score:0};const top=S.pl.reduce((a,b)=>b.score>a.score?b:a);if(top.score>best.score)store('ut_hindu_rekor',{score:top.score,name:top.name});
+setTimeout(report,1800,p)}
+
+/* ===== KUIS ===== */
+function pick(p){const lv=p.pos<35?1:p.pos<70?2:3;if(!S.pool.length)S.pool=shuf(BANK);
+let i=S.pool.findIndex(q=>q.lv===lv);if(i<0)i=0;return S.pool.splice(i,1)[0]}
+function ask(p,type){return new Promise(res=>{const q=pick(p),opts=shuf([{t:q.a,c:1},...q.w.map(t=>({t,c:0}))]);let done=false,tm,left=20;
+$('qt').textContent=({t:'🪜 Soal Tangga',u:'🐍 Soal Ular',b:'⭐ Soal Bintang (+20)',q:'❓ Soal Kuis'})[type];$('qp').textContent=p.name;$('qq').textContent=q.q;$('fb').innerHTML='';
+const box=$('qo');box.innerHTML='';const btn=[];
+const fin=(sel)=>{if(done)return;done=true;clearInterval(tm);btn.forEach(b=>b.disabled=true);
+const ok=sel>=0&&opts[sel].c===1;p.ans++;p.tp[q.tp][0]++;let extra='';
+btn.forEach((b,i)=>{if(opts[i].c)b.classList.add('ok');else if(i===sel)b.classList.add('no')});
+if(ok){p.ok++;p.tp[q.tp][1]++;p.streak++;p.score+=type==='b'?20:10;if(p.streak%3===0){p.score+=5;p.bonus+=5;extra=" 🔥 Bonus beruntun +5!"}sfx.ok()}
+else{p.streak=0;sfx.no()}
+const hint=ok?'':`<br>💡 Petunjuk: jawaban benar diawali huruf “${q.a[0]}”.`;
+$('fb').innerHTML=`<div class="fb"><b>${ok?'✅ Benar! Hebat!':sel<0?'⏰ Waktu habis, tidak apa-apa!':'❌ Belum tepat, ayo coba lagi nanti!'}</b>${extra}<br>Jawaban: <b>${q.a}</b>${hint}<br><small>🎯 ${TUJ[q.tp]}</small></div>`;
+upd();const go=()=>{$('quiz').classList.remove('on');res(ok)};
+if(p.bot)setTimeout(go,2200);else{const b=document.createElement('button');b.textContent='Lanjut ➡';b.style.marginTop='10px';b.onclick=go;$('fb').appendChild(b)}};
+opts.forEach((o,i)=>{const b=document.createElement('button');b.className='opt';b.textContent=String.fromCharCode(65+i)+". "+o.t;b.onclick=()=>fin(i);box.appendChild(b);btn.push(b)});
+$('quiz').classList.add('on');$('tb').style.width='100%';
+tm=setInterval(()=>{left-=.25;$('tb').style.width=Math.max(0,left/20*100)+'%';if(left<=0)fin(-1)},250);
+if(p.bot)setTimeout(()=>fin(Math.random()<.7?opts.findIndex(o=>o.c):opts.findIndex(o=>!o.c)),1500+rnd(1200))})}
+
+/* ===== LAPORAN ===== */
+function report(w){const L=S.pl.slice().sort((a,b)=>b.score-a.score);const tt=[0,1,2,3,4].map(i=>[S.pl.reduce((s,p)=>s+p.tp[i][0],0),S.pl.reduce((s,p)=>s+p.tp[i][1],0)]);
+const lat=[],ulang=[];tt.forEach((t,i)=>{if(!t[0])return;lat.push(TOPIK[i]);if(t[1]/t[0]<.7)ulang.push(i)});
+$('res').innerHTML=`<p>Pemenang: <b>${w.name}</b> 🎉</p><table><tr><th>Nama</th><th>Skor</th><th>Soal</th><th>✔</th><th>✘</th><th>%</th></tr>${L.map(p=>`<tr><td>${p.name}</td><td>${p.score}</td><td>${p.ans}</td><td>${p.ok}</td><td>${p.ans-p.ok}</td><td>${pct(p)}%</td></tr>`).join('')}</table>
+<h3>Materi yang dilatih</h3><p>${lat.join('; ')||'Belum ada soal dijawab.'}</p>
+<h3>Perlu dipelajari lagi</h3><p>${ulang.length?ulang.map(i=>TUJ[i]).join('<br>'):'Belum ada indikator dengan ketepatan di bawah 70% dari soal yang dijawab.'}</p>
+<h3>Rekomendasi</h3><p>${ulang.length?'Ulangi materi tersebut bersama guru dan mainkan lagi.':'Coba main lagi agar soal lain ikut dilatih. Skor permainan saja belum menunjukkan penguasaan kompetensi.'}</p>`;show('end')}
+
+/* ===== MENU ===== */
+const MODES=[[1,'1 Pemain vs Komputer 🤖'],[2,'2 Pemain'],[3,'3 Pemain'],[4,'4 Pemain']];
+function drawNames(){$('modes').innerHTML='';MODES.forEach(([n,t])=>{const b=document.createElement('button');b.textContent=t;b.className=n===modeN?'sel':'alt';b.onclick=()=>{modeN=n;drawNames()};$('modes').appendChild(b)});
+const c=modeN===1?2:modeN;$('names').innerHTML=Array.from({length:c},(_,i)=>`<label>${AV[i]} Nama pemain ${i+1}${modeN===1&&i===1?'':''}<input maxlength="14" id="n${i}" value="${modeN===1&&i===1?'Komputer':''}" ${modeN===1&&i===1?'disabled':''} placeholder="Pemain ${i+1}"></label>`).join('')}
+$('bPlay').onclick=()=>{drawNames();show('setup')};
+$('bHow').onclick=()=>show('how');$('bHow2').onclick=()=>show('how');
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>show(prev==='how'||prev==='setup'?'home':prev));
+$('bGo').onclick=()=>{const c=modeN===1?2:modeN;startGame(Array.from({length:c},(_,i)=>($('n'+i).value||'').trim()||(modeN===1&&i===1?'Komputer':'Pemain '+(i+1))))};
+$('bQuit').onclick=()=>$('conf').classList.add('on');$('cn').onclick=()=>$('conf').classList.remove('on');
+$('cy').onclick=()=>{$('conf').classList.remove('on');if(S)S.over=true;home()};
+$('bAgain').onclick=()=>{drawNames();show('setup')};$('bMenu').onclick=()=>home();
+function home(){const r=store('ut_hindu_rekor');$('rec').textContent=r?`🏅 Rekor: ${r.name} — ${r.score} poin`:'';show('home')}
+const ve=validate();if(ve.length)$('err').textContent="Konfigurasi salah: "+ve.join("; ");home();
+</script></body></html>
